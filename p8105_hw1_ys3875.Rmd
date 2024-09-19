@@ -1,0 +1,44 @@
+---
+title: "hw1"
+author: "Yanhao Shen"
+output: html_document
+date: "2024-09-18"
+---
+
+Q1.
+```{r}
+data('penguins', package = 'palmerpenguins')
+summary(penguins)
+```
+The dataset is about penguins, and it has 8 variables: species, island, bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g, sex, and year. The dataset has `r nrow(penguins)` rows and `r ncol(penguins)` columns. The mean flipper length is `r mean(penguins$flipper_length_mm, na.rm=TRUE)`.
+```{r}
+library(ggplot2)
+scatter_plot <- ggplot(penguins, aes(x=bill_length_mm, y=flipper_length_mm, color=species)) + geom_point()
+scatter_plot
+ggsave('scatter_plot.pdf', height = 4, width =6)
+```
+
+Q2.
+```{r}
+df <- data.frame(random_sample = rnorm(10),
+                 logical_vector = rnorm(10) > 0,
+                 character_vector = sample(letters, 10),
+                 factor_vector = factor(sample(c('Low',
+                                                 'Medium',
+                                                 'High'),
+                                               10, replace = TRUE))
+                 )
+df
+```
+```{r}
+mean(df$random_sample) #works because it is numeric
+mean(df$logical_vector) #works because TRUE are treated as 1, FALSE as 0
+mean(df$character_vector) # doesn’t work because character are not numeric
+mean(df$factor_vector) #doesn’t work because factors are not numeric
+```
+```{r eval=FALSE}
+as.numeric(df$logical_vector) #True will be 1, and False will be 0
+as.numeric(df$character_vector) #nothing help
+as.numeric(df$factor_vector) #factors will be converted to underlying numbers.
+```
+Numeric and Logical variables can have a mean because R can interpret them as numbers. Character and factors can’t have a mean without conversion. While after conversion, characters will be NA, and factors will be their underlying numbers. in this df, 3 as Medium, 2 as Low, and 1 as High.
